@@ -30,18 +30,43 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
 
 
+async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global api
+    api.reset_conversation()
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="重置对话")
+
+
+async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global api
+    api.clear_conversations()
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="清除对话")
+
+
+async def refresh(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global api
+    api.refresh_chat_page()
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="刷新交谈页面")
+
+
 if __name__ == '__main__':
     bot_token, cookie = load_conf("conf.toml")
     api = ChatGPT(cookie)  # specify proxy
 
     proxy_url = 'http://127.0.0.1:10809'
     application = ApplicationBuilder().token(bot_token).proxy_url(proxy_url).get_updates_proxy_url(proxy_url).build()
-    # application = ApplicationBuilder().token(bot_token).proxy_url(proxy_url).get_updates_proxy_url(proxy_url).build()
+
+    # application = ApplicationBuilder().token(bot_token).build()
 
     start_handler = CommandHandler('start', start)
+    reset_handler = CommandHandler('reset', reset)
+    clear_handler = CommandHandler('clear', clear)
+    refresh_handler = CommandHandler('refresh', refresh)
     echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo)
 
     application.add_handler(start_handler)
     application.add_handler(echo_handler)
+    application.add_handler(reset_handler)
+    application.add_handler(clear_handler)
+    application.add_handler(refresh_handler)
 
     application.run_polling()
