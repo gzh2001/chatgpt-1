@@ -18,7 +18,7 @@ def get_reply(ques):
 def load_conf(filePath):
     file = toml.load(filePath)
     settings = file['configs']
-    return settings['bot_token'], settings['cookie']
+    return settings['bot_token'], settings['cookie'], settings['proxy_url']
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -58,11 +58,16 @@ async def refresh(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == '__main__':
-    bot_token, cookie = load_conf("conf.toml")
+    bot_token, cookie, proxy_url = load_conf("conf.toml")
     api = ChatGPT(cookie)  # specify proxy
 
-    proxy_url = 'http://127.0.0.1:10809'
-    application = ApplicationBuilder().token(bot_token).proxy_url(proxy_url).get_updates_proxy_url(proxy_url).build()
+    # proxy_url = 'http://127.0.0.1:10809'
+
+    if len(proxy_url.strip()) == 0:
+        application = ApplicationBuilder().token(bot_token).build()
+    else:
+        logging.info("Proxy opened")
+        application = ApplicationBuilder().token(bot_token).proxy_url(proxy_url).get_updates_proxy_url(proxy_url).build()
 
     # application = ApplicationBuilder().token(bot_token).build()
 
