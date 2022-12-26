@@ -22,7 +22,16 @@ def load_conf(filePath):
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Chatgppt机器人")
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="""
+            Chatgppt机器人。\n
+            可用命令如下：\n
+                /reset -- 重置会话\n
+                /refresh -- 刷新会话页面（尽量别用）\n
+                /clear -- 清除所有会话\n
+            """
+    )
 
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
