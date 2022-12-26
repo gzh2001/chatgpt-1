@@ -1,3 +1,4 @@
 [configs]
 bot_token=""
 cookie=""
+proxy_url = ""
