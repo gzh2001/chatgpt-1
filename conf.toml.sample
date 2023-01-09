@@ -1,4 +1,4 @@
 [configs]
 bot_token=""  # tg机器人api
 cookie=""  # `__Secure-next-auth.session-token` cookie from https://chat.openai.com/chat
-proxy_url = ""  # 代理链接
+proxy_url = ""  # 代理链接，用于链接tg时代理
